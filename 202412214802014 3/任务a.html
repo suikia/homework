@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>图形变换与变换工具</title>
+    <style>
+        canvas { border: 1px solid #333; }
+        .controls { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+        .control-group { margin: 8px 0; padding: 5px; }
+        label { display: inline-block; width: 100px; }
+        button, select, input[type="range"] { margin: 0 5px; }
+        span.value-display { display: inline-block; width: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <!-- 图形选择 -->
+        <div class="control-group">
+            <label>选择图形：</label>
+            <select id="shapeSelect">
+                <option value="diamond">菱形</option>
+                <option value="triangle">三角形</option>
+                <option value="square">正方形</option>
+                <option value="pentagon">五边形</option>
+            </select>
+        </div>
+
+        <!-- 平移控制 -->
+        <div class="control-group">
+            <label>X平移：</label>
+            <input type="range" id="tx" min="-1.5" max="1.5" step="0.1" value="0">
+            <span class="value-display" id="txValue">0</span>
+
+            <label>Y平移：</label>
+            <input type="range" id="ty" min="-1.5" max="1.5" step="0.1" value="0">
+            <span class="value-display" id="tyValue">0</span>
+        </div>
+
+        <!-- 旋转控制 -->
+        <div class="control-group">
+            <label>旋转控制：</label>
+            <button id="reverseDir">反转方向</button>
+            <button id="speedUp">加速</button>
+            <button id="slowDown">减速</button>
+        </div>
+
+        <!-- 缩放控制 -->
+        <div class="control-group">
+            <label>缩放比例：</label>
+            <input type="range" id="scale" min="0.1" max="2" step="0.1" value="1">
+            <span class="value-display" id="scaleValue">1</span>
+        </div>
+    </div>
+
+    <canvas id="transform-canvas" width="600" height="600"></canvas>
+
+    <!-- 顶点着色器 -->
+    <script id="v-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        uniform mat4 transform;
+        void main() {
+            gl_Position = transform * vPosition;
+        }
+    </script>
+
+    <!-- 片元着色器 -->
+    <script id="f-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        void main() {
+            gl_FragColor = vec4(0.2, 0.6, 0.8, 1.0); // 蓝色系
+        }
+    </script>
+
+    <!-- 引入JS文件 -->
+    <script src="js/rostmenu.js"></script>
+</body>
+</html>
